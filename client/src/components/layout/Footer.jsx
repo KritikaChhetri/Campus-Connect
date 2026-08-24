@@ -1,7 +1,11 @@
 function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer>
-      <p>© 2026 Campus Connect</p>
+      <p>
+        © {currentYear} Campus Connect - University Management System
+      </p>
     </footer>
   );
 }

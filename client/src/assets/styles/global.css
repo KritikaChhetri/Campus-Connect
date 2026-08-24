@@ -12,16 +12,19 @@ body {
   color: var(--text-color);
 }
 
+/* Headings */
 h1,
 h2,
 h3 {
   margin-bottom: 30px;
 }
 
+/* Paragraphs */
 p {
   margin-bottom: 10px;
 }
 
+/* Reusable Button */
 button {
   padding: 10px 16px;
   border: none;
@@ -29,4 +32,67 @@ button {
   background-color: var(--primary-color);
   color: var(--white-color);
   cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* Navigation Bar */
+nav {
+  text-align: center;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  text-decoration: none;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+/* Card */
+.card {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 900px;
+  text-align: center;
+}
+
+/* Main Content */
+main {
+  text-align: center;
+  padding: 20px;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 8px;
+  padding: 0px;
+}
+
+/* Basic Responsive Design */
+@media (max-width: 600px) {
+  .nav-links {
+    gap: 12px;
+  }
+
+  h1 {
+    font-size: 36px;
+  }
+
+  .card {
+    padding: 15px;
+  }
 }
