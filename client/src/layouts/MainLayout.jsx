@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 
@@ -7,10 +8,7 @@ function MainLayout() {
       <Navbar />
 
       <main>
-        <h1>Welcome to Campus Connect</h1>
-        <p>
-          A University Management System for students, faculty, and administrators.
-        </p>
+        <Outlet />
       </main>
 
       <Footer />

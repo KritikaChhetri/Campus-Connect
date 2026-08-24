@@ -1,8 +1,17 @@
+import { NavLink } from "react-router-dom";
+
 function Navbar() {
   return (
     <nav>
       <h2>Campus Connect</h2>
-      <p>Navigation Bar</p>
+
+      <NavLink to="/">Home</NavLink>
+      {" | "}
+      <NavLink to="/dashboard">Dashboard</NavLink>
+      {" | "}
+      <NavLink to="/profile">Profile</NavLink>
+      {" | "}
+      <NavLink to="/login">Login</NavLink>
     </nav>
   );
 }
