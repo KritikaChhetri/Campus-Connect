@@ -1,0 +1,53 @@
+/* ============================= */
+/* Reusable Button */
+/* ============================= */
+
+button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+
+/* ============================= */
+/* Responsive Card Grid */
+/* ============================= */
+
+.card-grid {
+  width: 100%;
+  max-width: 1000px;
+  margin: 20px auto;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+
+/* ============================= */
+/* Reusable Card */
+/* ============================= */
+
+.card {
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  background-color: var(--white-color);
+  border-radius: var(--border-radius);
+}
+
+.card h3 {
+  margin-bottom: 15px;
+}
+
+.card p {
+  margin-bottom: 15px;
+}

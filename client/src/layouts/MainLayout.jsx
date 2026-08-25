@@ -4,10 +4,10 @@ import Footer from "../components/layout/Footer";
 
 function MainLayout() {
   return (
-    <div>
+    <div className="app-layout">
       <Navbar />
 
-      <main>
+      <main className="main-content">
         <Outlet />
       </main>
 
