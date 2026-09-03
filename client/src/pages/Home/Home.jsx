@@ -7,7 +7,10 @@ function Home() {
     <div className="page-container">
       <title>Home - Campus Connect</title>
 
-      <PageTitle title="Home" />
+      <PageTitle
+        title="Home"
+        description="Welcome to Campus Connect University Management System."
+      />
 
       <div className="card-grid">
         <Card

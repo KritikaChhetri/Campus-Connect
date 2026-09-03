@@ -21,3 +21,74 @@ h3 {
 p {
   margin-bottom: 10px;
 }
+/* Login Page */
+.login-page {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.login-card-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 25px;
+}
+
+.login-card-container .card {
+  width: 420px;
+  max-width: 90%;
+}
+
+.login-card-container input {
+  width: 250px;
+  padding: 10px;
+  margin: 15px 0 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.login-card-container button {
+  margin-top: 10px;
+}
+/* Profile Page */
+
+.profile-page {
+  width: 100%;
+  text-align: center;
+}
+
+.profile-card-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.profile-card-container .card {
+  width: 420px;
+  max-width: 90%;
+  padding: 30px;
+  text-align: center;
+}
+
+.profile-details {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-details p {
+  width: 250px;
+  text-align: left;
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.profile-details strong {
+  display: inline-block;
+  width: 85px;
+}

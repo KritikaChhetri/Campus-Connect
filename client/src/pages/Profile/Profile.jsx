@@ -1,34 +1,41 @@
 import PageTitle from "../../components/ui/PageTitle";
 import Card from "../../components/ui/Card";
-import Button from "../../components/ui/Button";
 
 function Profile() {
+  const student = {
+    name: "Kritika Chhetri",
+    rollNo: "006",
+    course: "BCA",
+  };
+
   return (
-    <div className="page-container">
+    <div className="profile-page">
       <title>Profile - Campus Connect</title>
 
-      <PageTitle title="Profile" />
+      <PageTitle
+        title="Profile"
+        description="View your personal and academic information."
+      />
 
-      <div className="card-grid">
-        <Card
-          title="My Profile"
-          description="View and manage your Campus Connect profile information."
-        >
-          <Button
-            text="Edit Profile"
-            onClick={() => alert("Profile editing will be available soon")}
-          />
-        </Card>
-
+      <div className="profile-card-container">
         <Card
           title="Personal Information"
-          description="Manage your basic personal and academic details."
-        />
+          description="Basic student details."
+        >
+          <div className="profile-details">
+            <p>
+              <strong>Name:</strong> {student.name}
+            </p>
 
-        <Card
-          title="Account Settings"
-          description="Update your account preferences and information."
-        />
+            <p>
+              <strong>Roll no:</strong> {student.rollNo}
+            </p>
+
+            <p>
+              <strong>Course:</strong> {student.course}
+            </p>
+          </div>
+        </Card>
       </div>
     </div>
   );
