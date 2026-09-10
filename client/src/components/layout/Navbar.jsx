@@ -19,6 +19,10 @@ function Navbar() {
           Dashboard
         </NavLink>
 
+        <NavLink to="/student-registration" style={linkStyle}>
+          Register Student
+        </NavLink>
+
         <NavLink to="/profile" style={linkStyle}>
           Profile
         </NavLink>
