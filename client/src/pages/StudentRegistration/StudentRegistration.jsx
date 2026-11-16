@@ -1,274 +1,362 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import {
+  createStudent,
+  deleteStudent,
+  getStudents,
+  updateStudent,
+} from "../../services/studentService";
+
+const emptyForm = {
+  name: "",
+  email: "",
+  course: "",
+  age: "",
+  status: "active",
+};
 
 function StudentRegistration() {
-  const initialFormData = {
-    studentId: "",
-    fullName: "",
-    email: "",
-    phone: "",
-    course: "",
-    semester: "",
-    gender: "",
-    password: "",
+  const [students, setStudents] = useState([]);
+  const [formData, setFormData] = useState(emptyForm);
+  const [editingId, setEditingId] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState("");
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    getStudents({ signal: controller.signal })
+      .then((result) => {
+        if (!controller.signal.aborted) {
+          setStudents(result.data);
+        }
+      })
+      .catch((requestError) => {
+        if (!controller.signal.aborted) {
+          setError(requestError.message);
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      });
+
+    return () => controller.abort();
+  }, []);
+
+  const loadStudents = async () => {
+    try {
+      const result = await getStudents();
+      setStudents(result.data);
+      setError("");
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const [formData, setFormData] = useState(initialFormData);
-  const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState("");
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((current) => ({ ...current, [name]: value }));
+    setError("");
+    setNotice("");
+  };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setSaving(true);
+    setError("");
+    setNotice("");
 
+    const student = {
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      course: formData.course.trim(),
+      status: formData.status,
+    };
+
+    if (formData.age !== "") {
+      student.age = Number(formData.age);
+    }
+
+    try {
+      if (editingId) {
+        const result = await updateStudent(editingId, student);
+        setStudents((current) =>
+          current.map((item) =>
+            item._id === editingId ? result.data : item
+          )
+        );
+        setNotice("Student updated successfully.");
+      } else {
+        const result = await createStudent(student);
+        setStudents((current) => [result.data, ...current]);
+        setNotice("Student registered successfully.");
+      }
+
+      setFormData(emptyForm);
+      setEditingId("");
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleEdit = (student) => {
+    setEditingId(student._id);
     setFormData({
-      ...formData,
-      [name]: value,
+      name: student.name,
+      email: student.email,
+      course: student.course,
+      age: student.age === undefined ? "" : String(student.age),
+      status: student.status,
     });
-
-    setErrors({
-      ...errors,
-      [name]: "",
-    });
-
-    setSuccessMessage("");
+    setError("");
+    setNotice("");
+    document.getElementById("student-name")?.focus();
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.studentId.trim()) {
-      newErrors.studentId = "Student ID is required.";
-    }
-
-    if (!formData.fullName.trim()) {
-      newErrors.fullName = "Full name is required.";
-    } else if (formData.fullName.trim().length < 3) {
-      newErrors.fullName = "Name must contain at least 3 characters.";
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Email address is required.";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address.";
-    }
-
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required.";
-    } else if (!/^[0-9]{10}$/.test(formData.phone)) {
-      newErrors.phone = "Phone number must contain 10 digits.";
-    }
-
-    if (!formData.course) {
-      newErrors.course = "Please select a course.";
-    }
-
-    if (!formData.semester) {
-      newErrors.semester = "Please select a semester.";
-    }
-
-    if (!formData.gender) {
-      newErrors.gender = "Please select your gender.";
-    }
-
-    if (!formData.password) {
-      newErrors.password = "Password is required.";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must contain at least 6 characters.";
-    }
-
-    return newErrors;
+  const handleCancelEdit = () => {
+    setEditingId("");
+    setFormData(emptyForm);
+    setError("");
+    setNotice("");
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const validationErrors = validateForm();
-
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      setSuccessMessage("");
+  const handleDelete = async (student) => {
+    if (!window.confirm(`Are you sure you want to delete ${student.name}?`)) {
       return;
     }
 
-    console.log("Student Registration Data:", formData);
+    setDeletingId(student._id);
+    setError("");
+    setNotice("");
 
-    setSuccessMessage("Student registered successfully!");
-    setErrors({});
-    setFormData(initialFormData);
-  };
+    try {
+      await deleteStudent(student._id);
+      setStudents((current) =>
+        current.filter((item) => item._id !== student._id)
+      );
 
-  const handleReset = () => {
-    setFormData(initialFormData);
-    setErrors({});
-    setSuccessMessage("");
+      if (editingId === student._id) {
+        handleCancelEdit();
+      }
+
+      setNotice("Student deleted successfully.");
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setDeletingId("");
+    }
   };
 
   return (
-    <div className="registration-page">
-      <div className="registration-header">
+    <section className="student-management">
+      <header className="student-management__header">
         <span className="registration-badge">Campus Connect</span>
-        <h1>Student Registration</h1>
-        <p>Fill in the details below to register a student.</p>
-      </div>
+        <h1>Student Management</h1>
+        <p>Create, view, update, and remove students from the student database.</p>
+      </header>
 
-      <div className="registration-card">
-        {successMessage && (
-          <div className="success-message">{successMessage}</div>
-        )}
+      {notice && (
+        <p className="student-feedback student-feedback--success" role="status">
+          {notice}
+        </p>
+      )}
+      {error && (
+        <p className="student-feedback student-feedback--error" role="alert">
+          {error}
+        </p>
+      )}
 
-        <form onSubmit={handleSubmit} noValidate>
-          <div className="form-grid">
-            <div className="form-group">
-              <label>Student ID *</label>
+      <section className="student-panel" aria-labelledby="student-form-title">
+        <h2 id="student-form-title">
+          {editingId ? "Edit student" : "Register a student"}
+        </h2>
+        <form className="student-form" onSubmit={handleSubmit}>
+          <div className="student-form__grid">
+            <div className="student-form__field">
+              <label htmlFor="student-name">Full name *</label>
               <input
-                type="text"
-                name="studentId"
-                placeholder="Enter student ID"
-                value={formData.studentId}
+                autoComplete="name"
+                id="student-name"
+                maxLength={120}
+                name="name"
                 onChange={handleChange}
+                required
+                value={formData.name}
               />
-              {errors.studentId && (
-                <p className="error-message">{errors.studentId}</p>
-              )}
             </div>
 
-            <div className="form-group">
-              <label>Full Name *</label>
+            <div className="student-form__field">
+              <label htmlFor="student-email">Email *</label>
               <input
-                type="text"
-                name="fullName"
-                placeholder="Enter full name"
-                value={formData.fullName}
-                onChange={handleChange}
-              />
-              {errors.fullName && (
-                <p className="error-message">{errors.fullName}</p>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label>Email *</label>
-              <input
-                type="email"
+                autoComplete="email"
+                id="student-email"
                 name="email"
-                placeholder="Enter email"
+                onChange={handleChange}
+                required
+                type="email"
                 value={formData.email}
-                onChange={handleChange}
               />
-              {errors.email && (
-                <p className="error-message">{errors.email}</p>
-              )}
             </div>
 
-            <div className="form-group">
-              <label>Phone *</label>
+            <div className="student-form__field">
+              <label htmlFor="student-course">Course *</label>
               <input
-                type="text"
-                name="phone"
-                placeholder="Enter 10-digit phone number"
-                value={formData.phone}
-                onChange={handleChange}
-              />
-              {errors.phone && (
-                <p className="error-message">{errors.phone}</p>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label>Course *</label>
-              <select
+                id="student-course"
                 name="course"
+                onChange={handleChange}
+                required
                 value={formData.course}
-                onChange={handleChange}
-              >
-                <option value="">Select course</option>
-                <option value="BCA">BCA</option>
-                <option value="BBA">BBA</option>
-                <option value="MCA">MCA</option>
-              </select>
-              {errors.course && (
-                <p className="error-message">{errors.course}</p>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label>Semester *</label>
-              <select
-                name="semester"
-                value={formData.semester}
-                onChange={handleChange}
-              >
-                <option value="">Select semester</option>
-                <option value="1">Semester 1</option>
-                <option value="2">Semester 2</option>
-                <option value="3">Semester 3</option>
-                <option value="4">Semester 4</option>
-                <option value="5">Semester 5</option>
-                <option value="6">Semester 6</option>
-              </select>
-              {errors.semester && (
-                <p className="error-message">{errors.semester}</p>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label>Gender *</label>
-
-              <div className="gender-options">
-                <label>
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="Female"
-                    checked={formData.gender === "Female"}
-                    onChange={handleChange}
-                  />
-                  Female
-                </label>
-
-                <label>
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="Male"
-                    checked={formData.gender === "Male"}
-                    onChange={handleChange}
-                  />
-                  Male
-                </label>
-              </div>
-
-              {errors.gender && (
-                <p className="error-message">{errors.gender}</p>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label>Password *</label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Minimum 6 characters"
-                value={formData.password}
-                onChange={handleChange}
               />
-              {errors.password && (
-                <p className="error-message">{errors.password}</p>
-              )}
+            </div>
+
+            <div className="student-form__field">
+              <label htmlFor="student-age">Age</label>
+              <input
+                id="student-age"
+                max="100"
+                min="16"
+                name="age"
+                onChange={handleChange}
+                type="number"
+                value={formData.age}
+              />
+            </div>
+
+            <div className="student-form__field">
+              <label htmlFor="student-status">Status</label>
+              <select
+                id="student-status"
+                name="status"
+                onChange={handleChange}
+                value={formData.status}
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
             </div>
           </div>
 
-          <div className="form-actions">
-            <button type="button" onClick={handleReset}>
-              Reset
+          <div className="student-form__actions">
+            <button disabled={saving} type="submit">
+              {saving
+                ? "Saving..."
+                : editingId
+                  ? "Save changes"
+                  : "Register student"}
             </button>
-
-            <button type="submit">
-              Register Student
-            </button>
+            {editingId && (
+              <button
+                className="student-button--secondary"
+                disabled={saving}
+                onClick={handleCancelEdit}
+                type="button"
+              >
+                Cancel
+              </button>
+            )}
           </div>
         </form>
-      </div>
-    </div>
+      </section>
+
+      <section className="student-panel" aria-labelledby="student-list-title">
+        <div className="student-list__heading">
+          <div>
+            <h2 id="student-list-title">Registered students</h2>
+            {!loading && !error && (
+              <p>{students.length} student{students.length === 1 ? "" : "s"}</p>
+            )}
+          </div>
+          <button
+            className="student-button--secondary"
+            disabled={loading}
+            onClick={() => {
+              setLoading(true);
+              setError("");
+              setNotice("");
+              loadStudents();
+            }}
+            type="button"
+          >
+            {loading ? "Loading..." : "Refresh"}
+          </button>
+        </div>
+
+        {loading ? (
+          <p className="student-list__message" role="status">
+            Loading students...
+          </p>
+        ) : error && students.length === 0 ? (
+          <p className="student-list__message">
+            Unable to load students. Use Refresh to try again.
+          </p>
+        ) : students.length === 0 ? (
+          <p className="student-list__message">
+            No students found. Register the first student above.
+          </p>
+        ) : (
+          <div className="student-table__scroll">
+            <table className="student-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Course</th>
+                  <th scope="col">Age</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {students.map((student) => (
+                  <tr key={student._id}>
+                    <td>{student.name}</td>
+                    <td>{student.email}</td>
+                    <td>{student.course}</td>
+                    <td>{student.age ?? "N/A"}</td>
+                    <td>
+                      <span
+                        className={`student-status student-status--${student.status}`}
+                      >
+                        {student.status}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="student-row__actions">
+                        <button
+                          className="student-button--secondary"
+                          disabled={Boolean(deletingId)}
+                          onClick={() => handleEdit(student)}
+                          type="button"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="student-button--danger"
+                          disabled={Boolean(deletingId)}
+                          onClick={() => handleDelete(student)}
+                          type="button"
+                        >
+                          {deletingId === student._id ? "Deleting..." : "Delete"}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+    </section>
   );
 }
 

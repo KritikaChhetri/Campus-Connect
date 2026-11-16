@@ -1,12 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import PageTitle from "../../components/ui/PageTitle";
 import Card from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
+import { getStudents } from "../../services/studentService";
 
 function Dashboard() {
-  // State for student count
-  const [studentCount, setStudentCount] = useState(0);
+  const [studentCount, setStudentCount] = useState(null);
+  const [studentCountError, setStudentCountError] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    getStudents({ signal: controller.signal })
+      .then((result) => setStudentCount(result.data.length))
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          setStudentCountError(error.message);
+        }
+      });
+
+    return () => controller.abort();
+  }, []);
 
   // Announcements list
   const announcements = [
@@ -15,9 +32,8 @@ function Dashboard() {
     "Assignment submission deadline updated",
   ];
 
-  // Add Student button
   const handleAddStudent = () => {
-    setStudentCount(studentCount + 1);
+    navigate("/student-registration");
   };
 
   // View Courses button
@@ -45,7 +61,16 @@ function Dashboard() {
           title="Students"
           description="View and manage student information."
         >
-          <p>Student Count: {studentCount}</p>
+          <p>
+            {studentCount === null
+              ? "Loading student count..."
+              : `Student Count: ${studentCount}`}
+          </p>
+          {studentCountError && (
+            <p className="error-message" role="alert">
+              {studentCountError}
+            </p>
+          )}
 
           <Button
             text="Add Student"

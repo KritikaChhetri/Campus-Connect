@@ -20,7 +20,7 @@ function Navbar() {
         </NavLink>
 
         <NavLink to="/student-registration" style={linkStyle}>
-          Register Student
+          Manage Students
         </NavLink>
 
         <NavLink to="/profile" style={linkStyle}>

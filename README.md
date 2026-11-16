@@ -106,4 +106,6 @@ Send JSON with the fields supported by the Student model: `name`, `email`, and `
 
 Successful responses use `{ "success": true, "message": "...", "data": ... }`. Invalid input returns `400`, missing students return `404`, and unexpected database failures return `500`.
 
+The React student management page uses the same API for listing, creating, editing, and deleting students. By default it connects to `http://localhost:5000/api`; to use a different backend URL, set `VITE_API_URL` in `client/.env` (for example, `VITE_API_URL=http://localhost:5000/api`). Start the backend and frontend separately, then open the student registration page to manage records.
+
 Run the backend API tests with `npm test` from the `server/` directory.
