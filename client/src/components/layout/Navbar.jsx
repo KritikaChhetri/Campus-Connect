@@ -23,6 +23,10 @@ function Navbar() {
           Manage Students
         </NavLink>
 
+        <NavLink to="/courses" style={linkStyle}>
+          Courses
+        </NavLink>
+
         <NavLink to="/profile" style={linkStyle}>
           Profile
         </NavLink>

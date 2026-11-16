@@ -6,6 +6,7 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import Profile from "../pages/Profile/Profile";
 import NotFound from "../pages/NotFound/NotFound";
 import StudentRegistration from "../pages/StudentRegistration/StudentRegistration";
+import Courses from "../pages/Courses/Courses";
 import MainLayout from "../layouts/MainLayout";
 
 function AppRoutes() {
@@ -19,6 +20,7 @@ function AppRoutes() {
           path="/student-registration"
           element={<StudentRegistration />}
         />
+        <Route path="/courses" element={<Courses />} />
       </Route>
 
       <Route path="/login" element={<Login />} />

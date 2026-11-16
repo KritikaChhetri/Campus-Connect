@@ -109,3 +109,17 @@ Successful responses use `{ "success": true, "message": "...", "data": ... }`. I
 The React student management page uses the same API for listing, creating, editing, and deleting students. By default it connects to `http://localhost:5000/api`; to use a different backend URL, set `VITE_API_URL` in `client/.env` (for example, `VITE_API_URL=http://localhost:5000/api`). Start the backend and frontend separately, then open the student registration page to manage records.
 
 Run the backend API tests with `npm test` from the `server/` directory.
+
+## Course API
+
+Courses are stored in the MongoDB `courses` collection and are available at `http://localhost:5000/api/courses`:
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| POST | `/api/courses` | Create a course |
+| GET | `/api/courses` | Retrieve all courses |
+| GET | `/api/courses/:id` | Retrieve a course by MongoDB ID |
+| PUT | `/api/courses/:id` | Update a course |
+| DELETE | `/api/courses/:id` | Delete a course |
+
+Course records contain a required `title`, unique `code`, whole-number `credits` (1-30), and `department`; `active` defaults to `true`. The React course catalog is available at `/courses` and uses the same API base URL as the student module.

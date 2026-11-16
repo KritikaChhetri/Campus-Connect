@@ -242,27 +242,27 @@
   }
 }
 
-.student-management {
+.module-management {
   max-width: 1100px;
   margin: 0 auto;
   padding: 36px 20px 56px;
 }
 
-.student-management__header {
+.module-management__header {
   margin-bottom: 28px;
   text-align: center;
 }
 
-.student-management__header h1 {
+.module-management__header h1 {
   margin: 0 0 10px;
   color: #172033;
 }
 
-.student-management__header p {
+.module-management__header p {
   color: #64748b;
 }
 
-.student-panel {
+.module-panel {
   margin-top: 22px;
   padding: 26px;
   border: 1px solid #e2e8f0;
@@ -271,32 +271,32 @@
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
 }
 
-.student-panel h2 {
+.module-panel h2 {
   margin: 0 0 20px;
   color: #172033;
   font-size: 22px;
 }
 
-.student-form__grid {
+.module-form__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
 }
 
-.student-form__field {
+.module-form__field {
   display: flex;
   flex-direction: column;
   gap: 7px;
 }
 
-.student-form__field label {
+.module-form__field label {
   color: #334155;
   font-size: 14px;
   font-weight: 600;
 }
 
-.student-form__field input,
-.student-form__field select {
+.module-form__field input,
+.module-form__field select {
   min-height: 44px;
   padding: 9px 12px;
   border: 1px solid #cbd5e1;
@@ -306,91 +306,91 @@
   font: inherit;
 }
 
-.student-form__field input:focus,
-.student-form__field select:focus {
+.module-form__field input:focus,
+.module-form__field select:focus {
   border-color: #2563eb;
   outline: 3px solid rgba(37, 99, 235, 0.14);
 }
 
-.student-form__actions,
-.student-list__heading,
-.student-row__actions {
+.module-form__actions,
+.module-list__heading,
+.module-row__actions {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.student-form__actions {
+.module-form__actions {
   margin-top: 22px;
 }
 
-.student-button--secondary {
+.module-button--secondary {
   border: 1px solid #cbd5e1;
   background: #f8fafc;
   color: #334155;
 }
 
-.student-button--danger {
+.module-button--danger {
   background: #b91c1c;
   color: #fff;
 }
 
-.student-feedback {
+.module-feedback {
   margin: 0 0 14px;
   padding: 12px 16px;
   border-radius: 8px;
 }
 
-.student-feedback--success {
+.module-feedback--success {
   border: 1px solid #bbf7d0;
   background: #f0fdf4;
   color: #166534;
 }
 
-.student-feedback--error {
+.module-feedback--error {
   border: 1px solid #fecaca;
   background: #fef2f2;
   color: #b91c1c;
 }
 
-.student-list__heading {
+.module-list__heading {
   justify-content: space-between;
   margin-bottom: 16px;
 }
 
-.student-list__heading h2 {
+.module-list__heading h2 {
   margin-bottom: 6px;
 }
 
-.student-list__heading p,
-.student-list__message {
+.module-list__heading p,
+.module-list__message {
   color: #64748b;
 }
 
-.student-table__scroll {
+.module-table__scroll {
   overflow-x: auto;
 }
 
-.student-table {
+.module-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
 }
 
-.student-table th,
-.student-table td {
+.module-table th,
+.module-table td {
   padding: 13px 12px;
   border-bottom: 1px solid #e2e8f0;
   white-space: nowrap;
 }
 
-.student-table th {
+.module-table th {
   background: #f8fafc;
   color: #475569;
   font-size: 13px;
 }
 
-.student-status {
+.module-status {
   display: inline-block;
   padding: 4px 9px;
   border-radius: 999px;
@@ -399,35 +399,50 @@
   text-transform: capitalize;
 }
 
-.student-status--active {
+.module-status--active {
   background: #dcfce7;
   color: #166534;
 }
 
-.student-status--inactive {
+.module-status--inactive {
   background: #e2e8f0;
   color: #475569;
 }
 
+.module-form__checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 18px;
+  color: #334155;
+  font-weight: 600;
+}
+
+.module-form__checkbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: #2563eb;
+}
+
 @media (max-width: 650px) {
-  .student-management {
+  .module-management {
     padding: 28px 4px 40px;
   }
 
-  .student-panel {
+  .module-panel {
     padding: 18px 14px;
   }
 
-  .student-form__grid {
+  .module-form__grid {
     grid-template-columns: 1fr;
   }
 
-  .student-form__actions,
-  .student-row__actions {
+  .module-form__actions,
+  .module-row__actions {
     flex-wrap: wrap;
   }
 
-  .student-list__heading {
+  .module-list__heading {
     align-items: flex-start;
   }
 }

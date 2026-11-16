@@ -36,9 +36,8 @@ function Dashboard() {
     navigate("/student-registration");
   };
 
-  // View Courses button
   const handleViewCourses = () => {
-    alert("Opening Courses");
+    navigate("/courses");
   };
 
   // View Assignments button

@@ -157,31 +157,31 @@ function StudentRegistration() {
   };
 
   return (
-    <section className="student-management">
-      <header className="student-management__header">
+    <section className="module-management">
+      <header className="module-management__header">
         <span className="registration-badge">Campus Connect</span>
         <h1>Student Management</h1>
         <p>Create, view, update, and remove students from the student database.</p>
       </header>
 
       {notice && (
-        <p className="student-feedback student-feedback--success" role="status">
+        <p className="module-feedback module-feedback--success" role="status">
           {notice}
         </p>
       )}
       {error && (
-        <p className="student-feedback student-feedback--error" role="alert">
+        <p className="module-feedback module-feedback--error" role="alert">
           {error}
         </p>
       )}
 
-      <section className="student-panel" aria-labelledby="student-form-title">
+      <section className="module-panel" aria-labelledby="student-form-title">
         <h2 id="student-form-title">
           {editingId ? "Edit student" : "Register a student"}
         </h2>
-        <form className="student-form" onSubmit={handleSubmit}>
-          <div className="student-form__grid">
-            <div className="student-form__field">
+        <form className="module-form" onSubmit={handleSubmit}>
+          <div className="module-form__grid">
+            <div className="module-form__field">
               <label htmlFor="student-name">Full name *</label>
               <input
                 autoComplete="name"
@@ -194,7 +194,7 @@ function StudentRegistration() {
               />
             </div>
 
-            <div className="student-form__field">
+            <div className="module-form__field">
               <label htmlFor="student-email">Email *</label>
               <input
                 autoComplete="email"
@@ -207,7 +207,7 @@ function StudentRegistration() {
               />
             </div>
 
-            <div className="student-form__field">
+            <div className="module-form__field">
               <label htmlFor="student-course">Course *</label>
               <input
                 id="student-course"
@@ -218,7 +218,7 @@ function StudentRegistration() {
               />
             </div>
 
-            <div className="student-form__field">
+            <div className="module-form__field">
               <label htmlFor="student-age">Age</label>
               <input
                 id="student-age"
@@ -231,7 +231,7 @@ function StudentRegistration() {
               />
             </div>
 
-            <div className="student-form__field">
+            <div className="module-form__field">
               <label htmlFor="student-status">Status</label>
               <select
                 id="student-status"
@@ -245,7 +245,7 @@ function StudentRegistration() {
             </div>
           </div>
 
-          <div className="student-form__actions">
+          <div className="module-form__actions">
             <button disabled={saving} type="submit">
               {saving
                 ? "Saving..."
@@ -255,7 +255,7 @@ function StudentRegistration() {
             </button>
             {editingId && (
               <button
-                className="student-button--secondary"
+                className="module-button--secondary"
                 disabled={saving}
                 onClick={handleCancelEdit}
                 type="button"
@@ -267,8 +267,8 @@ function StudentRegistration() {
         </form>
       </section>
 
-      <section className="student-panel" aria-labelledby="student-list-title">
-        <div className="student-list__heading">
+      <section className="module-panel" aria-labelledby="student-list-title">
+        <div className="module-list__heading">
           <div>
             <h2 id="student-list-title">Registered students</h2>
             {!loading && !error && (
@@ -276,7 +276,7 @@ function StudentRegistration() {
             )}
           </div>
           <button
-            className="student-button--secondary"
+            className="module-button--secondary"
             disabled={loading}
             onClick={() => {
               setLoading(true);
@@ -291,20 +291,20 @@ function StudentRegistration() {
         </div>
 
         {loading ? (
-          <p className="student-list__message" role="status">
+          <p className="module-list__message" role="status">
             Loading students...
           </p>
         ) : error && students.length === 0 ? (
-          <p className="student-list__message">
+          <p className="module-list__message">
             Unable to load students. Use Refresh to try again.
           </p>
         ) : students.length === 0 ? (
-          <p className="student-list__message">
+          <p className="module-list__message">
             No students found. Register the first student above.
           </p>
         ) : (
-          <div className="student-table__scroll">
-            <table className="student-table">
+          <div className="module-table__scroll">
+            <table className="module-table">
               <thead>
                 <tr>
                   <th scope="col">Name</th>
@@ -324,15 +324,15 @@ function StudentRegistration() {
                     <td>{student.age ?? "N/A"}</td>
                     <td>
                       <span
-                        className={`student-status student-status--${student.status}`}
+                        className={`module-status module-status--${student.status}`}
                       >
                         {student.status}
                       </span>
                     </td>
                     <td>
-                      <div className="student-row__actions">
+                      <div className="module-row__actions">
                         <button
-                          className="student-button--secondary"
+                          className="module-button--secondary"
                           disabled={Boolean(deletingId)}
                           onClick={() => handleEdit(student)}
                           type="button"
@@ -340,7 +340,7 @@ function StudentRegistration() {
                           Edit
                         </button>
                         <button
-                          className="student-button--danger"
+                          className="module-button--danger"
                           disabled={Boolean(deletingId)}
                           onClick={() => handleDelete(student)}
                           type="button"

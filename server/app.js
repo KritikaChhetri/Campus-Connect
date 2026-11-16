@@ -3,6 +3,7 @@ const cors = require("cors");
 
 const testRoutes = require("./routes/testRoutes");
 const studentRoutes = require("./routes/studentRoutes");
+const courseRoutes = require("./routes/courseRoutes");
 const requestLogger = require("./middleware/requestLogger");
 
 const app = express();
@@ -17,5 +18,8 @@ app.use("/api/test", testRoutes);
 
 // Student Routes
 app.use("/api/students", studentRoutes);
+
+// Course Routes
+app.use("/api/courses", courseRoutes);
 
 module.exports = app;
