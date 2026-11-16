@@ -4,6 +4,7 @@ const cors = require("cors");
 const testRoutes = require("./routes/testRoutes");
 const studentRoutes = require("./routes/studentRoutes");
 const courseRoutes = require("./routes/courseRoutes");
+const authRoutes = require("./routes/authRoutes");
 const requestLogger = require("./middleware/requestLogger");
 
 const app = express();
@@ -21,5 +22,8 @@ app.use("/api/students", studentRoutes);
 
 // Course Routes
 app.use("/api/courses", courseRoutes);
+
+// Authentication Routes
+app.use("/api/auth", authRoutes);
 
 module.exports = app;

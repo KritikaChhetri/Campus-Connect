@@ -67,6 +67,8 @@ The backend runs on:
 
 - Node.js
 - Express.js
+- Mongoose
+- bcryptjs (password hashing)
 - CORS
 - Dotenv
 - Nodemon
@@ -123,3 +125,16 @@ Courses are stored in the MongoDB `courses` collection and are available at `htt
 | DELETE | `/api/courses/:id` | Delete a course |
 
 Course records contain a required `title`, unique `code`, whole-number `credits` (1-30), and `department`; `active` defaults to `true`. The React course catalog is available at `/courses` and uses the same API base URL as the student module.
+
+## Authentication Foundation
+
+The authentication API provides:
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| POST | `/api/auth/register` | Create an account with a bcrypt-hashed password |
+| POST | `/api/auth/login` | Verify an email and password |
+
+Use the React `/register` and `/login` pages to test the flow. Registration requires a name, valid email, and password of at least 8 characters. Passwords are never returned by the API; duplicate emails and invalid credentials receive appropriate error responses. JWTs, persistent sign-in, and protected routes are intentionally deferred to a later sprint.
+
+Run the backend API tests, including registration/login tests, with `npm test` from the `server/` directory.

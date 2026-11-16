@@ -1,46 +1,99 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
-import PageTitle from "../../components/ui/PageTitle";
-import Card from "../../components/ui/Card";
-import Button from "../../components/ui/Button";
+import { loginUser } from "../../services/authService";
 
 function Login() {
-  const [userName, setUserName] = useState("");
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((current) => ({ ...current, [name]: value }));
+    setError("");
+    setSuccess("");
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const result = await loginUser({
+        email: formData.email.trim(),
+        password: formData.password,
+      });
+
+      setSuccess(
+        `${result.message} Persistent sign-in will be added in a later sprint.`
+      );
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
-    <div className="login-page">
-      <title>Login - Campus Connect</title>
+    <main className="auth-page">
+      <section className="auth-card" aria-labelledby="login-title">
+        <p className="auth-eyebrow">Campus Connect</p>
+        <h1 id="login-title">Welcome back</h1>
+        <p className="auth-description">Sign in with your account details.</p>
 
-      <PageTitle
-        title="Login"
-        description="Enter your account details to access Campus Connect."
-      />
+        {error && (
+          <p className="auth-feedback auth-feedback--error" role="alert">
+            {error}
+          </p>
+        )}
+        {success && (
+          <p className="auth-feedback auth-feedback--success" role="status">
+            {success}
+          </p>
+        )}
 
-      <div className="login-card-container">
-        <Card
-          title="Login to Campus Connect"
-          description="Enter your name below."
-        >
-          <input
-            type="text"
-            placeholder="Enter your name"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-          />
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <div className="auth-field">
+            <label htmlFor="login-email">Email</label>
+            <input
+              autoComplete="email"
+              id="login-email"
+              name="email"
+              onChange={handleChange}
+              required
+              type="email"
+              value={formData.email}
+            />
+          </div>
 
-          {userName ? (
-            <p>Welcome, {userName}</p>
-          ) : (
-            <p>Please enter your name</p>
-          )}
+          <div className="auth-field">
+            <label htmlFor="login-password">Password</label>
+            <input
+              autoComplete="current-password"
+              id="login-password"
+              maxLength={72}
+              name="password"
+              onChange={handleChange}
+              required
+              type="password"
+              value={formData.password}
+            />
+          </div>
 
-          <Button
-            text="Login"
-            onClick={() => alert(`Welcome ${userName}`)}
-          />
-        </Card>
-      </div>
-    </div>
+          <button className="auth-submit" disabled={isSubmitting} type="submit">
+            {isSubmitting ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        <p className="auth-switch">
+          Don&apos;t have an account? <Link to="/register">Register</Link>
+        </p>
+      </section>
+    </main>
   );
 }
 
